@@ -19,6 +19,15 @@ export const layout = {
         width: 15, 
     },
 
+    victory : {
+        position: "absolute", 
+        left: 610, 
+        top: 40,
+        color: "yellow",
+        backgroundColor: "#320453",
+        width: 1000, 
+    },
+
     buttons : {
         position: "absolute", 
         left: 550, 

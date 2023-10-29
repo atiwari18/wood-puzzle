@@ -3,7 +3,7 @@ import {layout} from './Layout.js';
 import React from "react";
 import Model from './Model/Model.js'
 import { redrawCanvas } from './Boundary/Boundary.js';
-import {puzzleInformation} from './Model/Puzzle.js';
+import {puzzleInformation} from './Model/TestPuzzle.js';
 import { selectPiece, movePiece } from './Controller/Controller.js';
 import { Up, Down, Left, Right } from './Model/Model.js';
 var actualPuzzle = JSON.parse(JSON.stringify(puzzleInformation));
@@ -41,6 +41,8 @@ function App() {
       <canvas tabIndex= "1" className = "App-Canvas" ref = {canvasRef} width = {layout.canvas.width} height = {layout.canvas.height}
               onClick= {handleClick}>
       </canvas>
+
+      {model.isVictorious() ? (<label style = {layout.victory}> You've Won </label>) : null }
         <label style={layout.text}> {"Number of Moves:" + model.numMoves} </label>
         <div style={layout.buttons}>
           <button style={layout.upButton} onClick = { (e) => movePieceHandler(Up)} disabled = {!model.available(Up)}> &#8593; </button>

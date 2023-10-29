@@ -49,7 +49,8 @@ export function drawPuzzle(ctx, puzzle, showLabels) {
 }
 
 export function redrawCanvas(model, canvasObj, appObj) {
-    const ctx = canvasObj.getContext('2d');
+    const ctx = canvasObj.getContext('2d'); 
+    if (ctx === null) { return; } //For testing purposes
 
     //Clear the canvas area before rendering the coordinates held in state. 
     ctx.clearRect(0, 0, canvasObj.width, canvasObj.height);

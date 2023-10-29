@@ -102,6 +102,12 @@ export class Puzzle {
         return piece === this.selected;
     }
 
+    //Determines whether the piece has won.
+    hasWon() {
+        let idx = this.pieces.findIndex(piece => piece.isWinner);
+        return this.destination.row === this.pieces[idx].row && this.destination.column === this.pieces[idx].column;
+    }
+
     //Determines if any piece in the puzzle covers given coordinate
     isCovered(coordinate) {
         let idx = this.pieces.findIndex(piece => piece.contains(coordinate));
@@ -184,22 +190,6 @@ export class Puzzle {
 
         return moves;
     }
-
-    /** Make a deep copy of this puzzle. */
-    clone() {
-        let copy = new Puzzle(this.numRows, this.numColumns, this.destination, this.finalMove, this.exit);
-        
-        copy.pieces = [];
-        for (let p of this.pieces) {
-            let dup = p.copy();
-            copy.pieces.push(dup);
-            if (p === this.selected) {
-                copy.selected = dup;
-            }
-        }
-        return copy;
-    }
-
  }
 
 export default class Model {
@@ -237,15 +227,6 @@ export default class Model {
         this.showLabels = false;
     }
 
-    copy() {
-        let m = new Model(this.info);
-        m.puzzle = this.puzzle.clone();
-        m.numMoves = this.numMoves;
-        m.showLabels = this.showLabels;
-        m.victory = this.victory;
-        return m;
-    }
-
     updateMoveCount(delta ) {
         this.numMoves += delta;
     }
@@ -254,10 +235,26 @@ export default class Model {
         return this.numMoves;
     }
 
+    victorious() {
+        this.victory = true;
+    }
+
+    isVictorious() {
+        return this.victory;
+    }
+
     available(direction) {
         //If no piece is selected. Then none are available.
         if (!this.puzzle.selected) { return false; }
         if (direction === NoMove ) { return false; }
+
+        // HANDLE WINNING CONDITION. MUST BE AVAILABLE!
+        if (this.puzzle.selected.isWinner && 
+            this.puzzle.selected.row === this.puzzle.destination.row && 
+            this.puzzle.selected.column === this.puzzle.destination.column && 
+            this.puzzle.finalMove === direction) {
+            return true;
+        }
 
         let allMoves = this.puzzle.availableMoves();
         return allMoves.includes(direction);

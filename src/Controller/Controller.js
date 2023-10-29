@@ -27,7 +27,14 @@ export function movePiece(model, direction) {
     let selected = model.puzzle.selected;
     if (!selected) { return; }
 
-    selected.move(direction);
+    if (model.puzzle.hasWon() && direction === model.puzzle.finalMove) {
+        model.puzzle.pieces = model.puzzle.pieces.filter( p => p !== selected);
+        model.puzzle.selected = null;
+        model.victorious();
+    } else {
+        selected.move(direction);
+    }
+
     model.updateMoveCount(+1);
 
     //return model.copy();
